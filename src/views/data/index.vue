@@ -3,18 +3,18 @@
     <dheader></dheader>
     <topnav></topnav>
     <div class="data-content">
-      <div class="data-time">
+      <!-- <div class="data-time">
         {{ $t("data.index") }}
-      </div>
+      </div> -->
       <div class="data-main">
         <div class="main-left">
-          <dleft :personalData="personalData" :username="username"></dleft>
+          <dleft :cmmDynamic="cmmDynamic" :cmmQualities="cmmQualities"></dleft>
         </div>
         <div class="main-center">
-          <dcontent :numberData="numberData" :username="username"></dcontent>
+          <dcontent :cncDynamic="cncDynamic" :cncQuantity="cncQuantity"></dcontent>
         </div>
         <div class="main-right">
-          <dright :username="username"></dright>
+          <dright :edmDynamic="edmDynamic" :edmQuantity="edmQuantity"></dright>
         </div>
       </div>
     </div>
@@ -41,43 +41,33 @@ export default {
       pageShow: true,
       personalData: {},
       numberData: {},
-      username: ""
+      username: "",
+      cmmDynamic: {},
+      cmmQualities: {},
+      cncDynamic: {},
+      cncQuantity: {},
+      edmDynamic: {},
+      edmQuantity: {}
     };
   },
   created() {
-    let username = this.$route.params.user;
-    this.getData(username);
+  //  let username = this.$route.params.user;
+    this.getData();
   },
   methods: {
-    getData(username) {
+    getData() {
       this.$axios
-        .get("https://api.github.com/users/" + username)
+        .get("http://192.168.1.22:8081/api/data")
         .then(response => {
           let res = JSON.parse(JSON.stringify(response));
           if (res.status === 200) {
-            this.username = username;
             let data = res.data;
-            //个人图片、加入github时间
-            let sinceDate = data.created_at;
-            let joinDate = sinceDate.substring(0, 10);
-            let img = data.avatar_url;
-            let objP = {
-              username: username,
-              joinDate: joinDate,
-              img: img
-            };
-            this.personalData = objP;
-            //仓库数、粉丝数、跟随数
-            let pubRepos = data.public_repos;
-            let followers = data.followers;
-            let following = data.following;
-            let objN = {
-              pubRepos: pubRepos,
-              followers: followers,
-              following: following
-            };
-            this.numberData = objN;
-            this.pageShow = false;
+            this.cmmDynamic = data.cmmDynamics;
+            this.cmmQualities = data.cmmQualities;
+            this.cncDynamic = data.cncDynamics;
+            this.cncQuantity = data.cncQuantity;
+            this.edmDynamic = data.edmDynamic;
+            this.edmQuantity = data.edmQuantities;
           }
           return;
         })
@@ -120,17 +110,17 @@ export default {
       height: 720px;
 
       .main-left {
-        width: 24%;
+        width: 33%;
         float: left;
       }
       .main-center {
         float: left;
-        width: 52%;
+        width: 33%;
         padding: 0 20px 0 20px;
       }
       .main-right {
         float: left;
-        width: 24%;
+        width: 33%;
         height: 615px;
       }
     }

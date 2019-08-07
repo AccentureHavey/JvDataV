@@ -44,7 +44,7 @@ export default {
   height: 100%;
   display: flex;
   .icon-box {
-    width: 40%;
+    width: 50%;
     height: 100%;
     float: left;
     display: flex;
