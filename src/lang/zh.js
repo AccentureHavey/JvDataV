@@ -2,12 +2,12 @@ export default {
   app: {
     appIntroduce:
       "Jvisoft 可视化看板，通过它，您可以一目了然车间的运行状况状况，机器的运行效率，以及每天的加工数量",
-    inputPlaceholder: "输入您的github账号，然后点击生成...",
+    inputPlaceholder: "输入您的，然后点击生成...",
     namelg: "请输入您的账号，再点生成!",
     account: "账号",
     notFound: " 未找到！",
-    clickP: " 点击「生成」按钮将视为您同意",
-    clickB: "GitDataV服务条款",
+    clickP: "",
+    clickB: "",
     subscribe: "生成",
     pmodal: {
       title: "GitDataV服务条款",
@@ -44,6 +44,12 @@ export default {
       }
     },
     dheader: "Jvisoft 数据可视化",
+    dleft: {
+      accountStars: "CMM稼动率",
+      accountLeng: "CMM检测合格率",
+      noStarData: "一个Stars",
+      nolanguageData: "一种语言"
+    },
     dright: {
       followers: "EDM电极",
       message:"机器主功率",
