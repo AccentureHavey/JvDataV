@@ -1,19 +1,54 @@
 <template>
   <div class="left-content">
     <div class="left-box">
-      <databox :title="''" :dheight="720">
-        <personal :personalData="personalData" :username="username"></personal>
+      <databox :title="''" :dheight="780">
+        <!-- <personal :personalData="personalData" :username="username"></personal> -->
+        <div class="top-box">
+          <div class="left">
+        <dnumber
+          :dheight="115"
+          :title="$t('data.myevent.pubRepos')"
+          :size="'4rem'"
+          :dnumber="120"
+          :icon="'kucunguanli'"
+          :color="'#ffff43'"
+        >
+        </dnumber>
+        </div>
+
+        <div class="middle">
+        <dnumber
+          :dheight="115"
+          :title="$t('data.myevent.pubRepos')"
+          :size="'4rem'"
+          :dnumber="120"
+          :icon="'kucunguanli'"
+          :color="'#ffff43'"
+        >
+        </dnumber>
+        </div>
+                <div class="right">
+        <dnumber
+          :dheight="115"
+          :title="$t('data.myevent.pubRepos')"
+          :size="'4rem'"
+          :dnumber="120"
+          :icon="'kucunguanli'"
+          :color="'#ffff43'"
+        >
+        </dnumber>
+        </div>
+
+        </div>
+        
         <databox
           :title="$t('data.dleft.accountStars')"
-          :dheight="280"
+          :dheight="300"
           :icon="'account'"
           :boxb="false"
         >
-          <ve-pie :data="starData" :extend="extend" :height="'250px'"></ve-pie>
-          <nodata
-            :nodata="$t('data.dleft.noStarData')"
-            v-if="noStarData"
-          ></nodata>
+          <!-- <ve-pie :data="starData" :extend="extend" :height="'250px'"></ve-pie> -->
+        <ve-gauge :data="chartData" :settings="chartSettings" :height="'300px'"></ve-gauge>
         </databox>
         <databox
           :title="$t('data.dleft.accountLeng')"
@@ -21,15 +56,12 @@
           :icon="'account'"
           :boxb="false"
         >
-          <ve-ring
+          <!-- <ve-ring
             :data="languageData"
             :extend="extend"
             :height="'230px'"
-          ></ve-ring>
-          <nodata
-            :nodata="$t('data.dleft.nolanguageData')"
-            v-if="nolanguageData"
-          ></nodata>
+          ></ve-ring> -->
+        <ve-gauge :data="chartData" :settings="chartSettings" :height="'300px'"></ve-gauge>
         </databox>
       </databox>
     </div>
@@ -38,9 +70,11 @@
 
 <script>
 import personal from "./personal";
+import dnumber from "../dcontent/dnumber";
 export default {
   components: {
-    personal
+    personal,
+    dnumber
   },
   props: {
     personalData: Object,
@@ -61,6 +95,78 @@ export default {
         center: ["50%", "50%"]
       }
     };
+    this.chartSettings = {
+        dataName: {
+          '稼动率': '%'
+        },
+        seriesMap: {
+          '稼动率': {
+            min:0,
+            max:100,
+            splitNumber:10,
+            radius: '80%',
+            axisLine: {
+              lineStyle: {
+                color: [[0.09, 'lime'],[0.82, '#1e90ff'],[1, '#ff4500']],
+                width: 2,
+                shadowColor: '#fff',
+                shadowBlur: 10
+              }
+            },
+            axisLabel: {
+              textStyle: {
+                fontWeight: 'bolder',
+                color: '#fff',
+                shadowColor: '#fff',
+                shadowBlur: 10
+              }
+            },
+            axisTick: {
+              length:15,
+              lineStyle: {
+                color: 'auto',
+                shadowColor: '#fff',
+                shadowBlur: 10
+              }
+            },
+            splitLine: {
+              length:25,
+              lineStyle: {
+                width:3,
+                color: '#fff',
+                shadowColor: '#fff',
+                shadowBlur: 10
+              }
+            },
+            pointer: {
+              shadowColor: '#fff',
+              shadowBlur: 5
+            },
+            title: {
+              textStyle: {
+                fontWeight: 'bolder',
+                fontSize: 20,
+                fontStyle: 'italic',
+                color: '#fff',
+                shadowColor: '#fff',
+                shadowBlur: 10
+              }
+            },
+            detail: {
+              backgroundColor: 'rgba(30,144,255,0.8)',
+              borderWidth: 1,
+              borderColor: '#fff',
+              shadowColor: '#fff',
+              shadowBlur: 5,
+              offsetCenter: [0, '50%'],
+              textStyle: {
+                fontWeight: 'bolder',
+                color: '#fff'
+              }
+            }
+          }
+        }
+      };
     return {
       personalD: {},
       starData: {
@@ -72,7 +178,13 @@ export default {
         columns: ["lang", "number"],
         rows: []
       },
-      nolanguageData: false
+      nolanguageData: false,
+      chartData: {
+          columns: ['type', 'value'],
+          rows: [
+            { type: '稼动率', value: 50.8 }
+          ]
+        }
     };
   },
   created() {},
@@ -144,13 +256,35 @@ export default {
   height: 100%;
   .left-box {
     width: 100%;
-    height: 720px;
-
+    height: 900px;
     padding-bottom: 40px;
+    .top-box {
+    display: flex;
+    width: 100%;
+    height: 110px;
+    overflow: hidden;
+     .left {
+      width: 30%;
+      background: rgba(35, 72, 135, 0.4);
+    }
+    .middle {
+      padding-left: 15px;
+      width: 30%;
+      background: rgba(35, 72, 135, 0.4);
+    }
+    .right {
+      padding-left: 15px;
+      width: 30%;
+      background: rgba(35, 72, 135, 0.4);
+    }
+
+    }
+
     .content-wapper {
       padding-top: 40px;
       height: 220px;
     }
   }
 }
+
 </style>
