@@ -9,7 +9,6 @@
           :icon="'account'"
           :boxb="false"
         >
-          <ve-pie :data="starData" :extend="extend" :height="'250px'"></ve-pie>
           <nodata
             :nodata="$t('data.dleft.noStarData')"
             v-if="noStarData"
@@ -21,11 +20,6 @@
           :icon="'account'"
           :boxb="false"
         >
-          <ve-ring
-            :data="languageData"
-            :extend="extend"
-            :height="'230px'"
-          ></ve-ring>
           <nodata
             :nodata="$t('data.dleft.nolanguageData')"
             v-if="nolanguageData"

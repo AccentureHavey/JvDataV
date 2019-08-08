@@ -14,7 +14,7 @@
           <dcontent :numberData="numberData" :username="username"></dcontent>
         </div>
         <div class="main-right">
-          <dright :username="username"></dright>
+          <dright :username="username" :numberData="numberData"></dright>
         </div>
       </div>
     </div>
@@ -92,6 +92,10 @@ export default {
 </script>
 
 <style lang="scss">
+* {
+  margin: 0;
+  padding: 0;
+}
 .data-page {
   background: url(../../assets/data/true.png) repeat-x;
   top: 0;
@@ -120,17 +124,17 @@ export default {
       height: 720px;
 
       .main-left {
-        width: 24%;
+        width: 33%;
         float: left;
       }
       .main-center {
         float: left;
-        width: 52%;
+        width: 34%;
         padding: 0 20px 0 20px;
       }
       .main-right {
         float: left;
-        width: 24%;
+        width: 33%;
         height: 615px;
       }
     }

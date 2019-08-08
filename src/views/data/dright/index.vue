@@ -1,123 +1,122 @@
 <template>
   <div class="right-content">
     <div class="top-box">
-      <databox :title="''" :dheight="440">
+      <databox :title="''" :dheight="720">
+        <div class="right">
+          <dnumber
+            :dheight="110"
+            :title="$t('data.dright.followers')"
+            :size="'4rem'"
+            :dnumber="numberData.followers"
+            :icon="'kucunguanli'"
+            :color="'#ffff43'"
+          >
+          </dnumber>
+        </div>
         <databox
-          :title="$t('data.dright.index.followers')"
-          :dheight="210"
-          :boxb="false"
-        >
-          <follower :data="followers"></follower>
-          <nodata
-            :nodata="$t('data.dright.index.noFollowers')"
-            v-if="noFollowers"
-          ></nodata>
-        </databox>
-        <databox
-          :title="$t('data.dright.index.following')"
-          :dheight="210"
-          :boxb="false"
-        >
-          <follower :data="following"></follower>
-          <nodata
-            :nodata="$t('data.dright.index.noFollowing')"
-            v-if="noFollowing"
-          ></nodata>
-        </databox>
-      </databox>
-      <div class="messege">
-        <databox
-          :title="$t('data.dright.index.messege')"
-          :dheight="260"
+          :title="$t('data.dright.message')"
+          :dheight="20"
           :icon="'account'"
+          :boxb="false"
         >
-          <message :data="messege"></message>
-          <nodata
-            :nodata="$t('data.dright.index.messege')"
-            v-if="noMessege"
-          ></nodata>
         </databox>
-      </div>
+        <ve-gauge :data="chartData" :settings="chartSettings"> </ve-gauge>
+      </databox>
     </div>
   </div>
 </template>
 
 <script>
-import follower from "./follower";
-import message from "./message";
+import dnumber from "./dnumber";
 export default {
-  components: {
-    follower,
-    message
-  },
+  components: { dnumber },
   props: {
-    username: String
+    numberData: String
   },
   data() {
+    this.chartSettings = {
+      dataName: {
+        速度: "%"
+      },
+      seriesMap: {
+        速度: {
+          min: 0,
+          max: 100,
+          splitNumber: 10,
+          radius: "50%",
+          axisLine: {
+            // 坐标轴线
+            lineStyle: {
+              color: [[0.09, "lime"], [0.82, "#1e90ff"], [1, "#ff4500"]],
+              width: 3,
+              shadowColor: "#fff",
+              shadowBlur: 10
+            }
+          },
+          axisLabel: {
+            textStyle: {
+              fontWeight: "bolder",
+              color: "#fff",
+              shadowColor: "#fff",
+              shadowBlur: 10
+            }
+          },
+          axisTick: {
+            length: 15,
+            lineStyle: {
+              color: "auto",
+              shadowColor: "#fff",
+              shadowBlur: 10
+            }
+          },
+          splitLine: {
+            length: 25,
+            lineStyle: {
+              width: 3,
+              color: "#fff",
+              shadowColor: "#fff",
+              shadowBlur: 10
+            }
+          },
+          pointer: {
+            shadowColor: "#fff",
+            shadowBlur: 5
+          },
+          title: {
+            textStyle: {
+              fontWeight: "bolder",
+              fontSize: 30,
+              color: "#fff",
+              shadowColor: "#fff",
+              shadowBlur: 10
+            }
+          },
+          detail: {
+            backgroundColor: "rgba(30,144,255,0.8)",
+            borderWidth: 1,
+            borderColor: "#fff",
+            shadowColor: "#fff",
+            shadowBlur: 5,
+            offsetCenter: [0, "50%"],
+            textStyle: {
+              color: "#fff"
+            }
+          }
+        }
+      }
+    };
     return {
-      followers: [],
-      noFollowers: false,
-      following: [],
-      noFollowing: false,
-      messege: [],
-      noMessege: false
+      chartData: {
+        columns: ["type", "value"],
+        rows: [{ type: "速度", value: 60 }]
+      }
     };
   },
   created() {
     // this.getData(this.username)
   },
-  methods: {
-    getData(username) {
-      let comUrl = "/api/users/";
-      let url1 = comUrl + username + "/followers";
-      let url2 = comUrl + username + "/following";
-      let url3 = comUrl + username + "/received_events";
-      this.$axios
-        .all([
-          this.$axios.get(url1),
-          this.$axios.get(url2),
-          this.$axios.get(url3)
-        ])
-        .then(
-          this.$axios.spread((res1, res2, res3) => {
-            //粉丝情况
-            let data1 = JSON.parse(JSON.stringify(res1.data));
-            if (data1.length < 1) {
-              this.noFollowers = true;
-            } else {
-              this.followers = data1.reverse();
-            }
-            //跟随情况
-            let data2 = JSON.parse(JSON.stringify(res2));
-            if (data2.data.length < 1) {
-              this.noFollowing = true;
-            } else {
-              this.following = data2.data.reverse();
-            }
-
-            //最新消息
-            let data3 = JSON.parse(JSON.stringify(res3));
-            if (data3.data.length < 1) {
-              this.noMessege = true;
-            } else {
-              this.messege = data3.data;
-            }
-
-            return;
-          })
-        )
-        .catch(err => {
-          console.log(err.message);
-        });
-    }
-  },
-  watch: {
-    username(username) {
-      if (username) {
-        this.getData(username);
-      }
-    }
-  }
+  methods: {},
+  watch: {}
 };
 </script>
 
@@ -127,8 +126,11 @@ export default {
   height: 100%;
   .top-box {
     padding-bottom: 40px;
-    .messege {
-      padding-top: 20px;
+    .right {
+      width: 40%;
+      margin: 30px auto;
+      background: rgba(35, 72, 135, 0.4);
+      border-radius: 10px;
     }
   }
 }

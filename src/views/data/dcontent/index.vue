@@ -1,66 +1,27 @@
 <template>
-  <div class="content-cont">
-    <div class="top-box">
-      <div class="left">
-        <dnumber
-          :dheight="110"
-          :title="$t('data.myevent.pubRepos')"
-          :size="'4rem'"
-          :dnumber="numberData.pubRepos"
-          :icon="'kucunguanli'"
-          :color="'#ffff43'"
-        >
-        </dnumber>
-      </div>
-      <div class="right">
-        <div class="content">
-          <dnumber
-            :dheight="110"
-            :title="$t('data.myevent.followers')"
-            :size="'3rem'"
-            :dnumber="numberData.followers"
-            :icon="'jindu1'"
-            :color="'#25f3e6'"
-          >
-          </dnumber>
-          <dnumber
-            :dheight="110"
-            :title="$t('data.myevent.following')"
-            :size="'3rem'"
-            :dnumber="numberData.following"
-            :icon="'success'"
-            :color="'#f84a4a'"
-          >
-          </dnumber>
-        </div>
-      </div>
-    </div>
+  <div class="content">
     <div class="content-box">
-      <databox
-        :title="$t('data.myevent.accountData')"
-        :dheight="350"
-        :icon="'account'"
-        :boxb="false"
-      >
-        <div class="content-wapper">
-          <!-- <ve-line :data="chartData" :extend="extend"></ve-line>-->
-          <ve-bar :data="repoData" :extend="extend" :height="'350px'"></ve-bar>
-          <nodata
-            :nodata="$t('data.myevent.noRepoSize')"
-            v-if="noRepoSize"
-          ></nodata>
+      <databox :title="''" :dheight="720">
+        <div class="left">
+          <dnumber
+            :dheight="110"
+            :title="$t('data.myevent.pubRepos')"
+            :size="'4rem'"
+            :dnumber="numberData.pubRepos"
+            :icon="'kucunguanli'"
+            :color="'#ffff43'"
+          >
+          </dnumber>
         </div>
-      </databox>
-      <databox
-        :title="$t('data.myevent.myevent')"
-        :dheight="220"
-        :icon="'account'"
-      >
-        <myevent :data="myevent"></myevent>
-        <nodata
-          :nodata="$t('data.myevent.noMyevent')"
-          v-if="noMyevent"
-        ></nodata>
+        <databox
+          :title="$t('data.dright.message')"
+          :dheight="20"
+          :icon="'account'"
+          :boxb="false"
+        >
+
+        </databox>
+        <ve-gauge :data="chartData" :settings="chartSettings"> </ve-gauge>
       </databox>
     </div>
   </div>
@@ -68,105 +29,94 @@
 
 <script>
 import dnumber from "./dnumber";
-import myevent from "./myevent";
-import { LINE_DATA } from "../test/data";
 export default {
   components: {
-    dnumber,
-    myevent
+    dnumber
   },
   props: {
-    numberData: Object,
-    username: String
+    numberData: Object
   },
   data() {
-    this.extend = {
-      series: {
-        label: {
-          normal: {
-            show: true
-          }
-        }
+    this.chartSettings = {
+      dataName: {
+        速度: "%"
       },
-      legend: {
-        textStyle: { color: "#fff" },
-        right: "6%"
-      },
-      yAxis: {
-        axisLabel: {
-          textStyle: {
-            color: "#fff"
-          }
-        }
-      },
-      xAxis: {
-        axisLabel: {
-          textStyle: {
-            color: "#fff"
+      seriesMap: {
+        速度: {
+          min: 0,
+          max: 100,
+          splitNumber: 10,
+          radius: "50%",
+          axisLine: {
+            // 坐标轴线
+            lineStyle: {
+              color: [[0.09, "lime"], [0.82, "#1e90ff"], [1, "#ff4500"]],
+              width: 3,
+              shadowColor: "#fff",
+              shadowBlur: 10
+            }
+          },
+          axisLabel: {
+            textStyle: {
+              fontWeight: "bolder",
+              color: "#fff",
+              shadowColor: "#fff",
+              shadowBlur: 10
+            }
+          },
+          axisTick: {
+            length: 15,
+            lineStyle: {
+              color: "auto",
+              shadowColor: "#fff",
+              shadowBlur: 10
+            }
+          },
+          splitLine: {
+            length: 25,
+            lineStyle: {
+              width: 3,
+              color: "#fff",
+              shadowColor: "#fff",
+              shadowBlur: 10
+            }
+          },
+          pointer: {
+            shadowColor: "#fff",
+            shadowBlur: 5
+          },
+          title: {
+            textStyle: {
+              fontWeight: "bolder",
+              fontSize: 30,
+              color: "#fff",
+              shadowColor: "#fff",
+              shadowBlur: 10
+            }
+          },
+          detail: {
+            backgroundColor: "rgba(30,144,255,0.8)",
+            borderWidth: 1,
+            borderColor: "#fff",
+            shadowColor: "#fff",
+            shadowBlur: 5,
+            offsetCenter: [0, "50%"],
+            textStyle: {
+              color: "#fff"
+            }
           }
         }
       }
     };
-
     return {
-      chartData: LINE_DATA,
-      myevent: [],
-      noMyevent: false,
-      repoData: {
-        columns: ["reposName", "size", "forks"],
-        rows: []
-      },
-      noRepoSize: false
+      chartData: {
+        columns: ["type", "value"],
+        rows: [{ type: "速度", value: 60 }]
+      }
     };
   },
-  methods: {
-    getData(username) {
-      let comUrl = "/api/users/";
-      let url1 = comUrl + username + "/events";
-      let url2 = comUrl + username + "/repos";
-      this.$axios
-        .all([this.$axios.get(url1), this.$axios.get(url2)])
-        .then(
-          this.$axios.spread((res1, res2) => {
-            //我最近操作
-            let data1 = JSON.parse(JSON.stringify(res1.data));
-            if (data1.length < 1) {
-              this.noMyevent = true;
-            } else {
-              this.myevent = data1;
-              //console.log(this.myevent)
-            }
-
-            //每个仓库的大小
-            let data2 = JSON.parse(JSON.stringify(res2.data));
-            if (data2.length < 1) {
-              this.noRepoSize = true;
-            } else {
-              let dataR = [];
-              for (var i = 0; i < data2.length; i++) {
-                let reposName = data2[i].name;
-                let size = data2[i].size;
-                let forks = data2[i].forks;
-                let objR = {
-                  reposName: reposName,
-                  size: size,
-                  forks: forks
-                };
-                dataR.push(objR);
-              }
-              //console.log(dataR);
-              this.repoData.rows = dataR;
-              //console.log(this.repoData.rows)
-            }
-
-            return;
-          })
-        )
-        .catch(err => {
-          console.log(err.message);
-        });
-    }
-  },
+  created() {},
+  methods: {},
   watch: {
     username(username) {
       if (username) {
@@ -178,35 +128,23 @@ export default {
 </script>
 
 <style lang="scss">
-.content-cont {
+.content {
   width: 100%;
   height: 100%;
-  .top-box {
-    display: flex;
-    width: 100%;
-    height: 110px;
-    overflow: hidden;
-    .left {
-      width: 1/3 * 100%;
-      background: rgba(35, 72, 135, 0.4);
-    }
-    .right {
-      flex: 1;
-      padding-left: 15px;
-      .content {
-        width: 100%;
-        height: 100%;
-        background: rgba(35, 72, 135, 0.4);
-
-        .number-box {
-          width: 50%;
-          float: left;
-        }
-      }
-    }
-  }
   .content-box {
-    padding-top: 30px;
+    width: 100%;
+    height: 720px;
+    padding-bottom: 40px;
+    .left {
+      width: 40%;
+      margin: 30px auto;
+      background: rgba(35, 72, 135, 0.4);
+      border-radius: 10px;
+
+    }
+    databox{
+      margin: 0 auto;
+    }
   }
 }
 </style>

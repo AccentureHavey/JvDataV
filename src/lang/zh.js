@@ -29,7 +29,7 @@ export default {
   data: {
     index: "温馨提示: 后续还会继续加功能，请关注我github更新cx...",
     myevent: {
-      pubRepos: "公开仓库数",
+      pubRepos: "CNC加工数",
       followers: "粉丝",
       following: "跟随",
       accountData: "仓库数据",
@@ -44,24 +44,14 @@ export default {
       }
     },
     dheader: "Jvisoft 数据可视化",
-    dleft: {
-      accountStars: "仓库Stars详情",
-      accountLeng: "仓库语言分类",
-      noStarData: "一个Stars",
-      nolanguageData: "一种语言"
-    },
     dright: {
+      followers: "EDM电极",
+      message:"机器主功率",
       index: {
-        followers: "新增粉丝",
         noFollowers: "一个粉丝",
         following: "最近跟随",
         noFollowing: "一个跟随",
-        messege: "最新消息"
       },
-      message: {
-        pOne: "给了你一个",
-        pTwo: "操作"
-      }
     }
   },
   loading: "正在疯狂的计算数据中+-*%....",
