@@ -6,8 +6,9 @@
           <div class="middle">
             <dnumber
               :dheight="110"
-              :title="$t('data.myevent.pubRepos')"
+              :title="$t('data.dleft.pubRepos')"
               :size="'4rem'"
+              text-align="center"
               :dnumber="cmmQualities.Quantity"
               :icon="'kucunguanli'"
               :color="'#ffff43'"
@@ -176,7 +177,7 @@ export default {
               let ccc = {
                 type: "稼动率",
                 value: cmm,
-                name: cnn
+                name: cnn+"稼动率"
               };
               dataR.push(ccc);
             });

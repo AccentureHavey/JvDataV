@@ -17,7 +17,7 @@
       <div class="row text-container ">
         <div class="tm-content col-md-6 col-sm-8 col-xs-12 ml-auto section">
           <div class="content-box">
-            <header class="mb-5"><h1>Jvisoft     车间可视化看板</h1></header>
+            <header class="mb-5"><h1>Jvisoft 车间可视化看板</h1></header>
             <P class="mb-5">{{ $t("app.appIntroduce") }}</P>
             <div class="subscribe-form">
               <div class="row form-section">
@@ -28,6 +28,7 @@
                     v-model="username"
                     @focus="onfocus"
                     :placeholder="$t('app.inputPlaceholder')"
+                    @keyup.enter="generate(username)"
                   />
                   <div class="help-box">
                     <strong v-if="namelg">{{ $t("app.namelg") }}</strong>
@@ -121,27 +122,33 @@ export default {
     },
     generate(username) {
       let name = username;
-      if (name.length <= 0) {
-        this.namelg = true;
-        return;
+      if (this.username === "Jvisoft") {
+        if (name.length <= 0) {
+          this.namelg = true;
+          console.log(567);
+          return;
+        } else {
+          console.log(789);
+          this.$axios
+            .get("/api/users/" + name)
+            .then(response => {
+              let res = JSON.parse(JSON.stringify(response));
+              if (res.status === 200) {
+                this.$router.push({
+                  name: "data",
+                  params: { user: name }
+                });
+              }
+              return;
+            })
+            .catch(err => {
+              this.nousename = true;
+              this.errname = name;
+              console.log(err.message);
+            });
+        }
       } else {
-        this.$axios
-          .get("/api/users/" + name)
-          .then(response => {
-            let res = JSON.parse(JSON.stringify(response));
-            if (res.status === 200) {
-              this.$router.push({
-                name: "data",
-                params: { user: name }
-              });
-            }
-            return;
-          })
-          .catch(err => {
-            this.nousename = true;
-            this.errname = name;
-            console.log(err.message);
-          });
+        alert("请输入正确的账号");
       }
     },
     onfocus() {

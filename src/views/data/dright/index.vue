@@ -5,7 +5,7 @@
         <div class="right">
           <dnumber
             :dheight="110"
-            :title="$t('data.dright.followers')"
+            :title="$t('data.dright.pubRepos')"
             :dnumber="edmQualities.EDMQuantity"
             :icon="'kucunguanli'"
             :color="'#ffff43'"
@@ -135,7 +135,7 @@ export default {
               let ccc = {
                 type: "速度",
                 value: cmm,
-                name: cnn
+                name: cnn+"稼动率"
               };
               dataR.push(ccc);
             });
@@ -183,5 +183,8 @@ export default {
       border-radius: 10px;
     }
   }
+}
+.number{
+  text-indent: 20px;
 }
 </style>

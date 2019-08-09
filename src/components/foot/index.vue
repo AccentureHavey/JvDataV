@@ -3,12 +3,7 @@
     <p>Copyright © 2019 Design and Development By Jvisoft</p>
     <p>
       Contact Me by Emile :
-      <a
-        href="https:www.Jvisoft.com"
-        target="_blank"
-        title="HongqingCao"
-        >Jvisoft</a
-      >
+      <a href="http://www.jvisoft.com/" target="_blank">Jvisoft</a>
     </p>
   </div>
 </template>

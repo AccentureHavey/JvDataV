@@ -140,7 +140,7 @@ export default {
               let ccc = {
                 type: "速度",
                 value: cmm,
-                name: cnn
+                name: cnn + "稼动率"
               };
               dataR.push(ccc);
             });
@@ -195,6 +195,12 @@ export default {
       background: rgba(35, 72, 135, 0.4);
       border-radius: 10px;
     }
+    .jdl {
+      display: inline-block;
+    }
   }
 }
+  .number{
+       text-indent: 14px;
+     }
 </style>

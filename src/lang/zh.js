@@ -8,7 +8,7 @@ export default {
     notFound: " 未找到！",
     clickP: "",
     clickB: "",
-    subscribe: "生成",
+    subscribe: "登录",
     pmodal: {
       title: "GitDataV服务条款",
       thanksP:
@@ -29,7 +29,7 @@ export default {
   data: {
     index: "温馨提示: 后续还会继续加功能，请关注我github更新cx...",
     myevent: {
-      pubRepos: "CNC加工数",
+      pubRepos: "CNC检测数",
       followers: "粉丝",
       following: "跟随",
       accountData: "仓库数据",
@@ -45,12 +45,14 @@ export default {
     },
     dheader: "Jvisoft 数据可视化",
     dleft: {
+      pubRepos:"CMM加工数",
       accountStars: "CMM稼动率",
       accountLeng: "CMM检测合格率",
       noStarData: "一个Stars",
       nolanguageData: "一种语言"
     },
     dright: {
+      pubRepos:"EDM电极加工数",
       followers: "EDM电极",
       message: "机器主功率"
     }
