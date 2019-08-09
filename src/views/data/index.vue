@@ -3,18 +3,21 @@
     <dheader></dheader>
     <topnav></topnav>
     <div class="data-content">
-      <!-- <div class="data-time">
-        {{ $t("data.index") }}
-      </div> -->
       <div class="data-main">
         <div class="main-left">
-          <dleft :personalData="personalData" :username="username"></dleft>
+          <dleft
+            :cmmDynamics="cmmDynamics"
+            :cmmQualities="cmmQualities"
+          ></dleft>
         </div>
         <div class="main-center">
-          <dcontent :numberData="numberData" :username="username"></dcontent>
+          <dcontent
+            :cncDynamics="cncDynamics"
+            :cncQuatity="cncQuatity"
+          ></dcontent>
         </div>
         <div class="main-right">
-          <dright :username="username" :numberData="numberData"></dright>
+          <dright :edmDynamic="edmDynamic" :edmQualities="edmQualities"></dright>
         </div>
       </div>
     </div>
@@ -41,42 +44,86 @@ export default {
       pageShow: true,
       personalData: {},
       numberData: {},
-      username: ""
+      username: "",
+      cmmDynamics: {},
+      cmmQualities: {},
+      cncDynamics: {},
+      cncQuatity: {},
+      edmDynamic: {},
+      edmQualities: {},
+      timeInterval: null
     };
   },
   created() {
-    let username = this.$route.params.user;
-    this.getData(username);
+    /*    let username = this.$route.params.user;*/
+    this.getData();
+  },
+  mounted() {
+    this.timeInterval = setInterval(() => {
+      this.getData()
+    }, 300000)
   },
   methods: {
-    getData(username) {
+    getData() {
       this.$axios
-        .get("https://api.github.com/users/" + username)
+        .get("http://192.168.1.22:8081/api/data")
         .then(response => {
           let res = JSON.parse(JSON.stringify(response));
           if (res.status === 200) {
-            this.username = username;
+            /*            this.username = username;*/
             let data = res.data;
-            //个人图片、加入github时间
-            let sinceDate = data.created_at;
-            let joinDate = sinceDate.substring(0, 10);
-            let img = data.avatar_url;
-            let objP = {
-              username: username,
-              joinDate: joinDate,
-              img: img
-            };
-            this.personalData = objP;
-            //仓库数、粉丝数、跟随数
-            let pubRepos = data.public_repos;
-            let followers = data.followers;
-            let following = data.following;
-            let objN = {
-              pubRepos: pubRepos,
-              followers: followers,
-              following: following
-            };
-            this.numberData = objN;
+            console.log(res.data);
+            this.cmmDynamics = data.data.cmmDynamics;
+            this.cmmQualities = data.data.cmmQualities;
+            if (data.data.cmmQualities.length>0){
+              let Quantity = data.data.cmmQualities[0].Quantity;
+              let CMM = {
+                Quantity: Quantity,
+              };
+              this.cmmQualities = CMM;
+            } else {
+              let Quantity = 0
+              let cmm = {
+                Quantity: Quantity,
+              };
+              this.cmmQualities = cmm;
+            }
+
+
+            this.cncDynamics = data.data.cncDynamics;
+            this.cncQuatity = data.data.cncQuatity;
+            if (data.data.cncQuatity.length > 0) {
+              let CNCQuantity = data.data.cncQuatity[0].CNCQuantity;
+              let CNC = {
+                CNCQuantity: CNCQuantity
+              };
+              this.cncQuatity = CNC;
+            } else {
+              let CNCQuantity = 0;
+              let cnc = {
+                CNCQuantity: CNCQuantity
+              };
+              this.cncQuatity = cnc;
+            }
+
+            this.edmDynamic = data.data.edmDynamic;
+            this.edmQualities = data.data.edmQualities;
+            console.log(888);
+            console.log(data.data.edmQualities.length);
+            if (data.data.edmQualities.length>0){
+              let EDMQuantity = data.data.edmQualities[0].EDMQuantity;
+              let EDM = {
+                EDMQuantity: EDMQuantity
+              };
+              this.edmQualities = EDM;
+            }else {
+              console.log(22222);
+              let EDMQuantity = 0;
+              let EDM = {
+                EDMQuantity: EDMQuantity
+              };
+              this.edmQualities = EDM;
+            }
             this.pageShow = false;
           }
           return;
@@ -92,8 +139,12 @@ export default {
 </script>
 
 <style lang="scss">
+  *{
+    margin: 0;
+    padding: 0;
+  }
 .data-page {
-  background: url(../../assets/data/true.png) repeat-x;
+  background:#121e34 url(../../assets/data/true.png) repeat-x;
   top: 0;
   right: 0;
   right: 0;
@@ -117,7 +168,7 @@ export default {
       width: calc(100% - 40px);
       margin-bottom: 40px;
       margin-left: 20px;
-      height: 720px;
+      height: 780px;
 
       .main-left {
         width: 33%;

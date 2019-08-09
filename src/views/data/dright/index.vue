@@ -1,26 +1,25 @@
 <template>
   <div class="right-content">
     <div class="top-box">
-      <databox :title="''" :dheight="720">
+      <databox :title="''" :dheight="780">
         <div class="right">
           <dnumber
             :dheight="110"
             :title="$t('data.dright.followers')"
-            :size="'4rem'"
-            :dnumber="numberData.followers"
+            :dnumber="edmQualities.EDMQuantity"
             :icon="'kucunguanli'"
             :color="'#ffff43'"
           >
           </dnumber>
         </div>
         <databox
-          :title="$t('data.dright.message')"
+          :title="testData.name"
           :dheight="20"
           :icon="'account'"
           :boxb="false"
         >
         </databox>
-        <ve-gauge :data="chartData" :settings="chartSettings"> </ve-gauge>
+        <ve-gauge :data="chartData" :settings="chartSettings" :height="'600px'"> </ve-gauge>
       </databox>
     </div>
   </div>
@@ -31,7 +30,7 @@ import dnumber from "./dnumber";
 export default {
   components: { dnumber },
   props: {
-    numberData: String
+    edmQualities: Object
   },
   data() {
     this.chartSettings = {
@@ -108,14 +107,65 @@ export default {
     return {
       chartData: {
         columns: ["type", "value"],
-        rows: [{ type: "速度", value: 60 }]
+        rows: []
+      },
+      testData: {
+        name: ""
       }
     };
   },
   created() {
-    // this.getData(this.username)
+    this.getData();
   },
-  methods: {},
+  methods: {
+    getData() {
+      this.$axios
+        .get("http://192.168.1.22:8081/api/data")
+        .then(response => {
+          let res = JSON.parse(JSON.stringify(response));
+          if (res.status === 200) {
+            /*            this.username = username;*/
+            let data = res.data;
+            let dataR = [];
+            this.edmDynamic = data.data.edmDynamic;
+            let data2 = data.data.edmDynamic;
+            data2.forEach(function(valus) {
+              let cmm = (valus.Activation * 100).toFixed(1);
+              let cnn = valus.EquipmentId;
+              let ccc = {
+                type: "速度",
+                value: cmm,
+                name: cnn
+              };
+              dataR.push(ccc);
+            });
+            var i = 0;
+            setInterval(() => {
+              if (i < dataR.length) {
+                this.testData.name = dataR[i].name;
+                let test = [];
+                test.push(dataR[i]);
+                console.log(88888);
+                console.log(this.testData.name);
+
+                this.chartData.rows = test;
+                console.log(99999);
+                console.log(this.chartData.rows);
+                i = i + 1;
+              } else {
+                i = 0;
+              }
+            }, 2500);
+          }
+          return;
+        })
+        .catch(err => {
+          this.pageShow = false;
+          this.isShow = true;
+          console.log(err.message);
+        });
+    }
+  },
   watch: {}
 };
 </script>

@@ -52,12 +52,7 @@ export default {
     },
     dright: {
       followers: "EDM电极",
-      message:"机器主功率",
-      index: {
-        noFollowers: "一个粉丝",
-        following: "最近跟随",
-        noFollowing: "一个跟随",
-      },
+      message: "机器主功率"
     }
   },
   loading: "正在疯狂的计算数据中+-*%....",
