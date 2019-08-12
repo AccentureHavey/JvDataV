@@ -92,7 +92,7 @@ export default {
   methods: {
     getData() {
       this.$axios
-        .get("http://192.168.1.22:8081/api/data")
+        .get("/api/api/data")
         .then(response => {
           let res = JSON.parse(JSON.stringify(response));
           if (res.status === 200) {

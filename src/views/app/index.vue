@@ -120,33 +120,9 @@ export default {
       }
       this.showList = false;
     },
-    generate(username) {
-      let name = username;
+    generate() {
       if (this.username === "Jvisoft") {
-        if (name.length <= 0) {
-          this.namelg = true;
-          console.log(567);
-          return;
-        } else {
-          console.log(789);
-          this.$axios
-            .get("/api/users/" + name)
-            .then(response => {
-              let res = JSON.parse(JSON.stringify(response));
-              if (res.status === 200) {
-                this.$router.push({
-                  name: "data",
-                  params: { user: name }
-                });
-              }
-              return;
-            })
-            .catch(err => {
-              this.nousename = true;
-              this.errname = name;
-              console.log(err.message);
-            });
-        }
+        this.$router.push('/data/index');
       } else {
         alert("请输入正确的账号");
       }
