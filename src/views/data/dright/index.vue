@@ -1,121 +1,86 @@
 <template>
   <div class="right-content">
     <div class="top-box">
-      <databox :title="''" :dheight="780">
-        <div class="right">
-          <dnumber
-            :dheight="110"
-            :title="$t('data.dright.pubRepos')"
-            :dnumber="edmQualities.EDMQuantity"
-            :icon="'kucunguanli'"
-            :color="'#ffff43'"
-          >
-          </dnumber>
-        </div>
+      <databox :title="''" :dheight="810">
         <databox
-          :title="testData.name"
+          :title="$t('data.dright.number')"
           :dheight="20"
           :icon="'account'"
           :boxb="false"
         >
         </databox>
-        <ve-gauge :data="chartData" :settings="chartSettings" :height="'600px'"> </ve-gauge>
+        <template>
+          <ve-histogram :data="chart01Data" :extend="chartExtend"></ve-histogram>
+        </template>
+        <databox
+          :title="$t('data.dright.accountStars')"
+          :dheight="20"
+          :icon="'account'"
+          :boxb="false"
+        >
+        </databox>
+        <template>
+          <ve-line :data="chartData" :settings="chartSettings" :extend="chartExtend"></ve-line>
+        </template>
       </databox>
     </div>
   </div>
 </template>
 
 <script>
-import dnumber from "./dnumber";
 export default {
-  components: { dnumber },
   props: {
     edmQualities: Object
   },
   data() {
     this.chartSettings = {
-      dataName: {
-        速度: "%"
+      yAxisType: ["percent"],
+      yAxisName: ["稼动率"]
+    };
+    this.chartExtend = {
+      legend: {
+        right: 20,
+        textStyle: {
+          color: "#ffffff",
+          fontSize: 16
+        },
+        data: {
+          name: "稼动率"
+        }
       },
-      seriesMap: {
-        速度: {
-          min: 0,
-          max: 100,
-          splitNumber: 10,
-          radius: "50%",
-          axisLine: {
-            // 坐标轴线
-            lineStyle: {
-              color: [[0.09, "lime"], [0.82, "#1e90ff"], [1, "#ff4500"]],
-              width: 3,
-              shadowColor: "#fff",
-              shadowBlur: 10
-            }
-          },
-          axisLabel: {
-            textStyle: {
-              fontWeight: "bolder",
-              color: "#fff",
-              shadowColor: "#fff",
-              shadowBlur: 10
-            }
-          },
-          axisTick: {
-            length: 15,
-            lineStyle: {
-              color: "auto",
-              shadowColor: "#fff",
-              shadowBlur: 10
-            }
-          },
-          splitLine: {
-            length: 25,
-            lineStyle: {
-              width: 3,
-              color: "#fff",
-              shadowColor: "#fff",
-              shadowBlur: 10
-            }
-          },
-          pointer: {
-            shadowColor: "#fff",
-            shadowBlur: 5
-          },
-          title: {
-            textStyle: {
-              fontWeight: "bolder",
-              fontSize: 30,
-              color: "#fff",
-              shadowColor: "#fff",
-              shadowBlur: 10
-            }
-          },
-          detail: {
-            backgroundColor: "rgba(30,144,255,0.8)",
-            borderWidth: 1,
-            borderColor: "#fff",
-            shadowColor: "#fff",
-            shadowBlur: 5,
-            offsetCenter: [0, "50%"],
-            textStyle: {
-              color: "#fff"
-            }
-          }
+      xAxis: {
+        axisLabel: {
+          color: "#ffffff"
+        }
+      },
+      yAxis: {
+        axisLabel: {
+          color: "#ffffff"
+        },
+        nameTextStyle: {
+          color: "#ffffff"
         }
       }
     };
     return {
+      timeInterval: null,
       chartData: {
-        columns: ["type", "value"],
+        columns: ["EquipmentId", "Activation"],
         rows: []
       },
-      testData: {
-        name: ""
+      chart01Data: {
+        columns: ["EDMEquipment", "EDMQuantity"],
+        rows: []
       }
     };
   },
   created() {
     this.getData();
+  },
+  mounted() {
+    this.timeInterval = setInterval(() => {
+      this.getData();
+    }, 300000);
   },
   methods: {
     getData() {
@@ -124,38 +89,9 @@ export default {
         .then(response => {
           let res = JSON.parse(JSON.stringify(response));
           if (res.status === 200) {
-            /*            this.username = username;*/
             let data = res.data;
-            let dataR = [];
-            this.edmDynamic = data.data.edmDynamic;
-            let data2 = data.data.edmDynamic;
-            data2.forEach(function(valus) {
-              let cmm = (valus.Activation * 100).toFixed(1);
-              let cnn = valus.EquipmentId;
-              let ccc = {
-                type: "速度",
-                value: cmm,
-                name: cnn+"稼动率"
-              };
-              dataR.push(ccc);
-            });
-            var i = 0;
-            setInterval(() => {
-              if (i < dataR.length) {
-                this.testData.name = dataR[i].name;
-                let test = [];
-                test.push(dataR[i]);
-                console.log(88888);
-                console.log(this.testData.name);
-
-                this.chartData.rows = test;
-                console.log(99999);
-                console.log(this.chartData.rows);
-                i = i + 1;
-              } else {
-                i = 0;
-              }
-            }, 2500);
+            this.chartData.rows = data.data.edmDynamic;
+            this.chart01Data.rows = data.data.edmQualities;
           }
           return;
         })
@@ -184,7 +120,7 @@ export default {
     }
   }
 }
-.number{
+.number {
   text-indent: 20px;
 }
 </style>

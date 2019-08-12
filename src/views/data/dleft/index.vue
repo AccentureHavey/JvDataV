@@ -1,163 +1,111 @@
 <template>
   <div class="left-content">
     <div class="left-box">
-      <databox :title="''" :dheight="780">
-        <div class="top-box">
-          <div class="middle">
-            <dnumber
-              :dheight="110"
-              :title="$t('data.dleft.pubRepos')"
-              :size="'4rem'"
-              text-align="center"
-              :dnumber="cmmQualities.Quantity"
-              :icon="'kucunguanli'"
-              :color="'#ffff43'"
-            >
-            </dnumber>
-          </div>
-        </div>
-
-        <databox
-          :title="testData.name"
-          :dheight="300"
-          :icon="'account'"
-          :boxb="false"
-        >
-          <ve-gauge
-            :data="chartData"
-            :settings="chartSettings"
-            :height="'300px'"
-          ></ve-gauge>
-        </databox>
+      <databox :title="''" :dheight="810">
         <databox
           :title="$t('data.dleft.accountLeng')"
-          :dheight="280"
+          :dheight="20"
           :icon="'account'"
           :boxb="false"
         >
-          <ve-gauge
-            :data="chartData"
-            :settings="chartSettings"
-            :height="'300px'"
-          ></ve-gauge>
         </databox>
+        <template>
+          <ve-pie :data="chart01Data" :settings="chartSetting" :extend="chartExtend01"></ve-pie>
+        </template>
+        <databox
+          :title="$t('data.dleft.accountStars')"
+          :dheight="20"
+          :icon="'account'"
+          :boxb="false"
+        >
+        </databox>
+        <template>
+          <ve-line :data="chartData" :settings="chartSettings" :extend="chartExtend"></ve-line>
+        </template>
       </databox>
     </div>
   </div>
 </template>
 
 <script>
-import dnumber from "./dnumber";
-
 export default {
-  components: {
-    dnumber
-  },
-  props: {
-    cmmQualities: Object
-  },
+  components: {},
+  props: {},
   data() {
-    this.extend = {
+    this.chartSettings = {
+      yAxisType: ["percent"],
+      yAxisName: ["稼动率"]
+    };
+    this.chartSetting = {
+      dimension: "Quality",
+      metrics: "Quantity"
+    };
+    this.chartExtend = {
       legend: {
-        textStyle: { color: "#fff" }
-      },
-      grid: {
+        right: 20,
         textStyle: {
-          color: "#fff"
+          color: "#ffffff",
+          fontSize: 16
+        },
+        data: {
+          name: "稼动率"
         }
       },
-      series: {
-        radius: ["0", "40%"],
-        center: ["50%", "50%"]
+      xAxis: {
+        axisLabel: {
+          color: "#ffffff"
+        }
+      },
+      yAxis: {
+        axisLabel: {
+          color: "#ffffff"
+        },
+        nameTextStyle: {
+          color: "#ffffff"
+        }
       }
     };
-    this.chartSettings = {
-      dataName: {
-        稼动率: "%"
+    this.chartExtend01 = {
+      legend: {
+        right: 20,
+        textStyle: {
+          color: "#ffffff",
+          fontSize: 16
+        },
       },
-      seriesMap: {
-        稼动率: {
-          min: 0,
-          max: 100,
-          splitNumber: 10,
-          radius: "80%",
-          axisLine: {
-            lineStyle: {
-              color: [[0.09, "lime"], [0.82, "#1e90ff"], [1, "#ff4500"]],
-              width: 2,
-              shadowColor: "#fff",
-              shadowBlur: 10
-            }
-          },
-          axisLabel: {
-            textStyle: {
-              fontWeight: "bolder",
-              color: "#fff",
-              shadowColor: "#fff",
-              shadowBlur: 10
-            }
-          },
-          axisTick: {
-            length: 15,
-            lineStyle: {
-              color: "auto",
-              shadowColor: "#fff",
-              shadowBlur: 10
-            }
-          },
-          splitLine: {
-            length: 25,
-            lineStyle: {
-              width: 3,
-              color: "#fff",
-              shadowColor: "#fff",
-              shadowBlur: 10
-            }
-          },
-          pointer: {
-            shadowColor: "#fff",
-            shadowBlur: 5
-          },
-          title: {
-            textStyle: {
-              fontWeight: "bolder",
-              fontSize: 20,
-              fontStyle: "italic",
-              color: "#fff",
-              shadowColor: "#fff",
-              shadowBlur: 10
-            }
-          },
-          detail: {
-            backgroundColor: "rgba(30,144,255,0.8)",
-            borderWidth: 1,
-            borderColor: "#fff",
-            shadowColor: "#fff",
-            shadowBlur: 5,
-            offsetCenter: [0, "50%"],
-            textStyle: {
-              fontWeight: "bolder",
-              color: "#fff"
-            }
-          }
+      xAxis: {
+        axisLabel: {
+          color: "#ffffff"
+        }
+      },
+      yAxis: {
+        axisLabel: {
+          color: "#ffffff"
+        },
+        nameTextStyle: {
+          color: "#ffffff"
         }
       }
     };
     return {
-      personalD: {},
-      testData: {
-        name: ""
-      },
-      noStarData: false,
-      nolanguageData: false,
+      timeInterval: null,
       chartData: {
-        columns: ["type", "value"],
+        columns: ["EquipmentId", "Activation"],
+        rows: []
+      },
+      chart01Data: {
+        columns: ["Quality", "Quantity"],
         rows: []
       }
     };
   },
   created() {
-    this.getData()
+    this.getData();
+  },
+  mounted(){
+    this.timeInterval = setInterval(() => {
+      this.getData()
+    }, 300000)
   },
   methods: {
     getData() {
@@ -166,38 +114,10 @@ export default {
         .then(response => {
           let res = JSON.parse(JSON.stringify(response));
           if (res.status === 200) {
-            /*            this.username = username;*/
             let data = res.data;
-            let dataR = [];
-            this.cmmDynamics = data.data.cmmDynamics;
-            let data2 = data.data.cmmDynamics;
-            data2.forEach(function(valus) {
-              let cmm = (valus.Activation * 100).toFixed(1);
-              let cnn = valus.EquipmentId;
-              let ccc = {
-                type: "稼动率",
-                value: cmm,
-                name: cnn+"稼动率"
-              };
-              dataR.push(ccc);
-            });
-            var i = 0;
-            setInterval(() => {
-              if (i < dataR.length) {
-                this.testData.name = dataR[i].name;
-                let test = [];
-                test.push(dataR[i]);
-                console.log(88888);
-                console.log(this.testData.name);
-
-                this.chartData.rows = test;
-                console.log(99999);
-                console.log(this.chartData.rows);
-                i = i + 1;
-              } else {
-                i = 0;
-              }
-            }, 2500);
+            console.log(res.data);
+            this.chartData.rows = data.data.cmmDynamics;
+            this.chart01Data.rows = data.data.cmmQualities;
           }
           return;
         })
@@ -225,8 +145,7 @@ export default {
 
   .left-box {
     width: 100%;
-    height: 780px;
-    padding-bottom: 40px;
+    height: 810px;
 
     .middle {
       width: 40%;

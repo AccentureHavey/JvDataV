@@ -29,8 +29,8 @@ export default {
   data: {
     index: "温馨提示: 后续还会继续加功能，请关注我github更新cx...",
     myevent: {
-      pubRepos: "CNC检测数",
-      followers: "粉丝",
+      accountStars: "CNC稼动率",
+      number: "CNC加工数量",
       following: "跟随",
       accountData: "仓库数据",
       noRepoSize: "仓库",
@@ -45,15 +45,14 @@ export default {
     },
     dheader: "Jvisoft 数据可视化",
     dleft: {
-      pubRepos:"CMM加工数",
       accountStars: "CMM稼动率",
       accountLeng: "CMM检测合格率",
       noStarData: "一个Stars",
       nolanguageData: "一种语言"
     },
     dright: {
-      pubRepos:"EDM电极加工数",
-      followers: "EDM电极",
+      accountStars: "edm稼动率",
+      number: "edm加工数量",
       message: "机器主功率"
     }
   },
