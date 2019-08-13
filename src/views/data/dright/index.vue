@@ -10,7 +10,10 @@
         >
         </databox>
         <template>
-          <ve-histogram :data="chart01Data" :extend="chartExtend"></ve-histogram>
+          <ve-histogram
+            :data="chart01Data"
+            :extend="chartExtend01"
+          ></ve-histogram>
         </template>
         <databox
           :title="$t('data.dright.accountStars')"
@@ -20,7 +23,11 @@
         >
         </databox>
         <template>
-          <ve-line :data="chartData" :settings="chartSettings" :extend="chartExtend"></ve-line>
+          <ve-line
+            :data="chartData"
+            :settings="chartSettings"
+            :extend="chartExtend"
+          ></ve-line>
         </template>
       </databox>
     </div>
@@ -30,12 +37,41 @@
 <script>
 export default {
   props: {
-    edmQualities: Object
+    edmDynamic: Array,
+    edmQualities: Array
   },
   data() {
     this.chartSettings = {
       yAxisType: ["percent"],
       yAxisName: ["稼动率"]
+    };
+    this.chartExtend01 = {
+      legend: {
+        right: 20,
+        textStyle: {
+          color: "#ffffff",
+          fontSize: 16
+        },
+        data: {
+          name: "稼动率"
+        }
+      },
+      xAxis: {
+        axisLabel: {
+          color: "#ffffff"
+        }
+      },
+      yAxis: {
+        axisLabel: {
+          color: "#ffffff"
+        },
+        nameTextStyle: {
+          color: "#ffffff"
+        }
+      },
+      series: {
+        label: { show: true, position: "top" }
+      }
     };
     this.chartExtend = {
       legend: {
@@ -77,29 +113,11 @@ export default {
   created() {
     this.getData();
   },
-  mounted() {
-    this.timeInterval = setInterval(() => {
-      this.getData();
-    }, 300000);
-  },
+
   methods: {
     getData() {
-      this.$axios
-        .get("/api/api/data")
-        .then(response => {
-          let res = JSON.parse(JSON.stringify(response));
-          if (res.status === 200) {
-            let data = res.data;
-            this.chartData.rows = data.data.edmDynamic;
-            this.chart01Data.rows = data.data.edmQualities;
-          }
-          return;
-        })
-        .catch(err => {
-          this.pageShow = false;
-          this.isShow = true;
-          console.log(err.message);
-        });
+      this.chartData.rows = this.edmDynamic;
+      this.chart01Data.rows = this.edmQualities;
     }
   },
   watch: {}
@@ -110,8 +128,10 @@ export default {
 .right-content {
   width: 100%;
   height: 100%;
+
   .top-box {
     padding-bottom: 40px;
+
     .right {
       width: 40%;
       margin: 30px auto;
@@ -120,6 +140,7 @@ export default {
     }
   }
 }
+
 .number {
   text-indent: 20px;
 }

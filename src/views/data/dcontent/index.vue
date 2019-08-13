@@ -12,7 +12,7 @@
         <template>
           <ve-histogram
             :data="chart01Data"
-            :extend="chartExtend"
+            :extend="chartExtend01"
           ></ve-histogram>
         </template>
 
@@ -38,11 +38,42 @@
 <script>
 export default {
   components: {},
-  props: {},
+  props: {
+    cncDynamics: Array,
+    cncQuatity: Array
+  },
   data() {
     this.chartSettings = {
       yAxisType: ["percent"],
       yAxisName: ["稼动率"]
+    };
+    this.chartExtend01 = {
+      legend: {
+        right: 20,
+        textStyle: {
+          color: "#ffffff",
+          fontSize: 16
+        },
+        data: {
+          name: "稼动率"
+        }
+      },
+      xAxis: {
+        axisLabel: {
+          color: "#ffffff"
+        }
+      },
+      yAxis: {
+        axisLabel: {
+          color: "#ffffff"
+        },
+        nameTextStyle: {
+          color: "#ffffff"
+        }
+      },
+      series: {
+        label: { show: true, position: "top" }
+      }
     };
     this.chartExtend = {
       legend: {
@@ -81,39 +112,22 @@ export default {
       }
     };
   },
-  created() {
+    created() {
     this.getData();
   },
-  mounted() {
-    this.timeInterval = setInterval(() => {
-      this.getData();
-    }, 300000);
-  },
+
   methods: {
     getData() {
-      this.$axios
-        .get("/api/api/data")
-        .then(response => {
-          let res = JSON.parse(JSON.stringify(response));
-          if (res.status === 200) {
-            let data = res.data;
-            console.log(res.data);
-            this.chartData.rows = data.data.cncDynamics;
-            this.chart01Data.rows = data.data.cncQuatity;
-          }
-          return;
-        })
-        .catch(err => {
-          this.pageShow = false;
-          this.isShow = true;
-          console.log(err.message);
-        });
+      this.chartData.rows = this.cncDynamics;
+      this.chart01Data.rows = this.cncQuatity;
     }
   },
   watch: {
     username(username) {
       if (username) {
+
         this.getData(username);
+
       }
     }
   }

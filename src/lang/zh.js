@@ -51,8 +51,8 @@ export default {
       nolanguageData: "一种语言"
     },
     dright: {
-      accountStars: "edm稼动率",
-      number: "edm加工数量",
+      accountStars: "EDM稼动率",
+      number: "EDM加工数量",
       message: "机器主功率"
     }
   },

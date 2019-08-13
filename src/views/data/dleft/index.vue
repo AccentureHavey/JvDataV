@@ -10,7 +10,11 @@
         >
         </databox>
         <template>
-          <ve-pie :data="chart01Data" :settings="chartSetting" :extend="chartExtend01"></ve-pie>
+          <ve-pie
+            :data="chart01Data"
+            :settings="chartSetting"
+            :extend="chartExtend01"
+          ></ve-pie>
         </template>
         <databox
           :title="$t('data.dleft.accountStars')"
@@ -20,7 +24,11 @@
         >
         </databox>
         <template>
-          <ve-line :data="chartData" :settings="chartSettings" :extend="chartExtend"></ve-line>
+          <ve-line
+            :data="chartData"
+            :settings="chartSettings"
+            :extend="chartExtend"
+          ></ve-line>
         </template>
       </databox>
     </div>
@@ -30,7 +38,10 @@
 <script>
 export default {
   components: {},
-  props: {},
+  props: {
+    cmmDynamics: Array,
+    cmmQualities: Array
+  },
   data() {
     this.chartSettings = {
       yAxisType: ["percent"],
@@ -71,7 +82,7 @@ export default {
         textStyle: {
           color: "#ffffff",
           fontSize: 16
-        },
+        }
       },
       xAxis: {
         axisLabel: {
@@ -84,6 +95,11 @@ export default {
         },
         nameTextStyle: {
           color: "#ffffff"
+        }
+      },
+      series:{
+        label:{
+          formatter:'{b}({d}%)'
         }
       }
     };
@@ -102,37 +118,10 @@ export default {
   created() {
     this.getData();
   },
-  mounted(){
-    this.timeInterval = setInterval(() => {
-      this.getData()
-    }, 300000)
-  },
   methods: {
     getData() {
-      this.$axios
-        .get("/api/api/data")
-        .then(response => {
-          let res = JSON.parse(JSON.stringify(response));
-          if (res.status === 200) {
-            let data = res.data;
-            console.log(res.data);
-            this.chartData.rows = data.data.cmmDynamics;
-            this.chart01Data.rows = data.data.cmmQualities;
-          }
-          return;
-        })
-        .catch(err => {
-          this.pageShow = false;
-          this.isShow = true;
-          console.log(err.message);
-        });
-    }
-  },
-  watch: {
-    username(username) {
-      if (username) {
-        this.getData(username);
-      }
+      this.chartData.rows = this.cmmDynamics;
+      this.chart01Data.rows = this.cmmQualities;
     }
   }
 };
