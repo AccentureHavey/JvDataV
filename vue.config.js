@@ -1,10 +1,10 @@
 module.exports = {
-  publicPath: process.env.NODE_ENV === "production" ? "/GitDataV/" : "/",
+  publicPath: process.env.NODE_ENV === "production" ? "/" : "/",
   devServer: {
     port: 8081,
     proxy: {
       "/api": {
-        target: "http://localhost:8090",
+        target: "https://api.github.com",
         changeOrigin: true,
         ws: true,
         pathRewrite: {

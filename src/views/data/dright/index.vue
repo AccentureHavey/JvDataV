@@ -9,12 +9,15 @@
           :boxb="false"
         >
         </databox>
-        <template>
+        <template v-if="edm">
           <ve-histogram
             :data="chart01Data"
             :extend="chartExtend01"
           ></ve-histogram>
         </template>
+        <div class="edm" v-else>
+          <p>没有EDM加工数量数据</p>
+        </div>
         <databox
           :title="$t('data.dright.accountStars')"
           :dheight="20"
@@ -22,13 +25,16 @@
           :boxb="false"
         >
         </databox>
-        <template>
+        <template v-if="EDM">
           <ve-line
             :data="chartData"
             :settings="chartSettings"
             :extend="chartExtend"
           ></ve-line>
         </template>
+        <div class="edm" v-else>
+          <p>没有EDM稼动率数据</p>
+        </div>
       </databox>
     </div>
   </div>
@@ -37,8 +43,7 @@
 <script>
 export default {
   props: {
-    edmDynamic: Array,
-    edmQualities: Array
+    edmDynamic: Array
   },
   data() {
     this.chartSettings = {
@@ -99,13 +104,15 @@ export default {
       }
     };
     return {
+      edm:true,
+      EDM:true,
       timeInterval: null,
       chartData: {
         columns: ["EquipmentId", "Activation"],
         rows: []
       },
       chart01Data: {
-        columns: ["EDMEquipment", "EDMQuantity"],
+        columns: ["EquipmentId", "Quantity"],
         rows: []
       }
     };
@@ -116,8 +123,14 @@ export default {
 
   methods: {
     getData() {
-      this.chartData.rows = this.edmDynamic;
-      this.chart01Data.rows = this.edmQualities;
+      if (this.edmDynamic.length >0) {
+        console.log(55555);
+        this.chartData.rows = this.edmDynamic;
+        this.chart01Data.rows = this.edmDynamic;
+      } else {
+        console.log(3333);
+        this.EDM = false;
+      }
     }
   },
   watch: {}
@@ -140,7 +153,15 @@ export default {
     }
   }
 }
-
+.edm{
+  width: 100%;
+  height: 35%;
+  text-align: center;
+  color: white;
+  p {
+    margin-top:30%;
+  }
+}
 .number {
   text-indent: 20px;
 }

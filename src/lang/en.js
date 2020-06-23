@@ -45,7 +45,7 @@ export default {
         remarks: "Remarks"
       }
     },
-    dheader: "GitDataV Data Platform",
+    dheader: "Jviosft Data Platform",
     dleft: {
       accountStars: "Repositories Stars",
       accountLeng: "Repositories Language classification",

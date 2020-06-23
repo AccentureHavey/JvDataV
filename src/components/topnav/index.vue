@@ -1,5 +1,5 @@
 <template>
-  <div class="navbar">
+  <div class="nav-navbar">
     <ul>
       <li @click="fullBox">
         <icon :type="'quanping'" :size="'2.2rem'" :color="'#fff'"> </icon>
@@ -52,15 +52,17 @@ export default {
 </script>
 
 <style lang="scss">
-.navbar {
-  top: -80px;
+.nav-navbar {
+  position: fixed;
+  top: 10px;
   width: 202px;
-  height: 50px;
+  height: 30px;
   margin-bottom: 0;
   background: rgba(216, 191, 216, 0.2);
   border-radius: 0;
   border: none;
-  margin-left: -150px;
+  z-index: 999;
+  /* margin-left: 150px;*/
   transition: margin-left 0.9s;
   ul {
     width: 100%;

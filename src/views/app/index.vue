@@ -121,8 +121,15 @@ export default {
       this.showList = false;
     },
     generate() {
-      if (this.username === "Jvisoft") {
-        this.$router.push('/data/index');
+      if (this.username === "EDM") {
+        this.$router.push("/dataEDM/index");
+        this.isShow = true;
+      }  else if (this.username === "CNC") {
+        this.$router.push("/CNC/index");
+        this.isShow = true;
+      } else if (this.username === "ALL") {
+        this.$router.push("/All/index");
+        this.isShow = true;
       } else {
         alert("请输入正确的账号");
       }

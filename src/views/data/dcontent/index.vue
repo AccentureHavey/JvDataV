@@ -9,12 +9,16 @@
           :boxb="false"
         >
         </databox>
-        <template>
+        <template v-if="att">
           <ve-histogram
             :data="chart01Data"
             :extend="chartExtend01"
           ></ve-histogram>
         </template>
+          <div class="cnc" v-else>
+            <p>没有CNC加工数量数据</p>
+          </div>
+
 
         <databox
           :title="$t('data.myevent.accountStars')"
@@ -23,13 +27,16 @@
           :boxb="false"
         >
         </databox>
-        <template>
+        <template v-if="trr">
           <ve-line
             :data="chartData"
             :settings="chartSettings"
             :extend="chartExtend"
           ></ve-line>
         </template>
+        <div class="cnc" v-else>
+          <p>没有CNC稼动率数据</p>
+        </div>
       </databox>
     </div>
   </div>
@@ -39,8 +46,7 @@
 export default {
   components: {},
   props: {
-    cncDynamics: Array,
-    cncQuatity: Array
+    cncDynamics: Array
   },
   data() {
     this.chartSettings = {
@@ -102,32 +108,37 @@ export default {
     };
     return {
       timeInterval: null,
+      att: true,
+      trr:true,
       chartData: {
         columns: ["EquipmentId", "Activation"],
         rows: []
       },
       chart01Data: {
-        columns: ["CNCEquipment", "CNCQuantity"],
+        columns: ["EquipmentId", "Quantity"],
         rows: []
       }
     };
   },
-    created() {
+  created() {
     this.getData();
   },
 
   methods: {
     getData() {
-      this.chartData.rows = this.cncDynamics;
-      this.chart01Data.rows = this.cncQuatity;
+      if (this.cncDynamics.length > 0) {
+        console.log(777);
+        this.chartData.rows = this.cncDynamics;
+        this.chart01Data.rows = this.cncDynamics;
+      } else {
+        this.trr = false;
+      }
     }
   },
   watch: {
     username(username) {
       if (username) {
-
         this.getData(username);
-
       }
     }
   }
@@ -135,24 +146,28 @@ export default {
 </script>
 
 <style lang="scss">
+  *{
+    margin: 0;
+    padding: 0;
+  }
 .content {
   width: 100%;
   height: 100%;
   .content-box {
     width: 100%;
     height: 810px;
-    padding-bottom: 40px;
-    .left {
-      width: 40%;
-      margin: 30px auto;
-      background: rgba(35, 72, 135, 0.4);
-      border-radius: 10px;
-    }
-    .jdl {
-      display: inline-block;
-    }
   }
 }
+.cnc{
+  width: 100%;
+  height: 35%;
+  text-align: center;
+  color: white;
+  p {
+    margin-top:30%;
+  }
+}
+
 .number {
   text-indent: 14px;
 }

@@ -15,14 +15,12 @@
           <dcontent
             v-if="flag"
             :cncDynamics="cncDynamics"
-            :cncQuatity="cncQuatity"
           ></dcontent>
         </div>
         <div class="main-right">
           <dright
             v-if="flag"
             :edmDynamic="edmDynamic"
-            :edmQualities="edmQualities"
           ></dright>
         </div>
       </div>
@@ -54,9 +52,7 @@ export default {
       cmmDynamics: [],
       cmmQualities: [],
       cncDynamics: [],
-      cncQuatity: [],
       edmDynamic: [],
-      edmQualities: [],
       timeInterval: null,
       flag: false
     };
@@ -65,39 +61,34 @@ export default {
     this.getData();
   },
   mounted() {
-    /*    this.timeInterval = setInterval(() => {
+    this.timeInterval = setInterval(() => {
       this.getData();
-    }, 300000);*/
+    }, 60000);
   },
   methods: {
     getData() {
       this.$axios
-        .get("/api/api/data")
+        .get(this.baseURL + "/api/data")
         .then(response => {
           let res = JSON.parse(JSON.stringify(response));
           if (res.status === 200) {
             let data = res.data;
-            console.log(898989);
-            console.log(res.data.cmmDynamics)
-            console.log(data.data.cmmDynamics);
-            this.cmmDynamics = data.data.cmmDynamics;
-            console.log(88888);
-            console.log(this.cmmDynamics);
+            console.log(66666);
+            console.log(res.data);
+            this.cmmDynamics = data.data.CMM;
+            console.log(data.data.CMM);
             this.cmmQualities = data.data.cmmQualities;
-            this.cncDynamics = data.data.cncDynamics;
-            this.cncQuatity = data.data.cncQuatity;
-            this.edmDynamic = data.data.edmDynamic;
-            this.edmQualities = data.data.edmQualities;
+            this.cncDynamics = data.data.CNC;
+            this.edmDynamic = data.data.EDM;
             this.flag = true;
             this.pageShow = false;
           }
           return;
         })
         .catch(err => {
-          console.log(111);
           this.pageShow = false;
           this.isShow = true;
-          console.log(err.message);
+          console.log(err);
         });
     }
   }
@@ -105,6 +96,8 @@ export default {
 </script>
 
 <style lang="scss">
+
+
 * {
   margin: 0;
   padding: 0;

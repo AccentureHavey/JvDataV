@@ -9,13 +9,16 @@
           :boxb="false"
         >
         </databox>
-        <template>
+        <template v-if="cmm">
           <ve-pie
             :data="chart01Data"
             :settings="chartSetting"
             :extend="chartExtend01"
           ></ve-pie>
         </template>
+        <div class="cmm" v-else>
+          <p>没有CMM合格率数据</p>
+        </div>
         <databox
           :title="$t('data.dleft.accountStars')"
           :dheight="20"
@@ -23,13 +26,12 @@
           :boxb="false"
         >
         </databox>
-        <template>
-          <ve-line
-            :data="chartData"
-            :settings="chartSettings"
-            :extend="chartExtend"
-          ></ve-line>
+        <template v-if="CMM">
+          <ve-histogram :data="chartData" :extend="chartExtend"></ve-histogram>
         </template>
+        <div class="cmm" v-else>
+          <p>没有CMM稼动率数据</p>
+        </div>
       </databox>
     </div>
   </div>
@@ -74,6 +76,9 @@ export default {
         nameTextStyle: {
           color: "#ffffff"
         }
+      },
+      series: {
+        label: { show: true, position: "top" }
       }
     };
     this.chartExtend01 = {
@@ -97,13 +102,15 @@ export default {
           color: "#ffffff"
         }
       },
-      series:{
-        label:{
-          formatter:'{b}({d}%)'
+      series: {
+        label: {
+          formatter: "{b}({d}%)"
         }
       }
     };
     return {
+      cmm: true,
+      CMM: true,
       timeInterval: null,
       chartData: {
         columns: ["EquipmentId", "Activation"],
@@ -120,8 +127,16 @@ export default {
   },
   methods: {
     getData() {
-      this.chartData.rows = this.cmmDynamics;
-      this.chart01Data.rows = this.cmmQualities;
+      if (this.cmmDynamics.length > 0) {
+        this.chartData.rows = this.cmmDynamics;
+      } else {
+        this.CMM = false;
+      }
+      if (this.cmmQualities.length > 0) {
+        this.chart01Data.rows = this.cmmQualities;
+      } else {
+        this.cmm = false;
+      }
     }
   }
 };
@@ -147,6 +162,15 @@ export default {
       padding-top: 40px;
       height: 220px;
     }
+  }
+}
+.cmm {
+  width: 100%;
+  height: 35%;
+  text-align: center;
+  color: white;
+  p {
+    margin-top: 30%;
   }
 }
 </style>
