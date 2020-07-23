@@ -13,6 +13,7 @@ import "./assets/iconfont/iconfont.css";
 import "./assets/css/global.scss";
 import i18n from "./lang";
 import VueI18n from "vue-i18n";
+// eslint-disable-next-line no-unused-vars
 import { resolve, reject } from "_any-promise@1.3.0@any-promise";
 
 Vue.use(VueParticles);
